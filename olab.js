@@ -31,29 +31,34 @@ var olab_sort = (function () {
     };
 
     function updateView(object, selector) {
-        olab_sort.buttons = $(".btn");
+        olab_sort.buttons = $("a.btn");
 
         olab_sort.titles.forEach(function (title) {
 
-            if (title == "Navigatie"){
+            if (title == "Navigatie") {
                 $(selector).append("<div id='main-navigation'></div>");
-                olab_sort.buttons.each(function () {
+                olab_sort.buttons.each(function (index, btnName) {
+
+                    console.log(btnName);
+
+
                     var navClass = "nav-title-" + title.replace(/\s+/g, '-').toLowerCase();
 
-                    if ($(this).text() == name) {
+                    if ($(this).text() == $(btnName).text()) {
+                        
                         if ($('.' + navClass).length == 0) {
                             $('#main-navigation').append("<h1 class=" + navClass + ">" + title + "</h1>");
                         }
-                        $('#main-navigation').append(this);
+
+                        $('#main-navigation').append($(this));
                     }
 
                     if ($(this).text() == "Maak je SBAR") {
                         $(this).attr("id", "navButtonExtra");
                     }
                 });
-            }
-
-            olab_sort.categories[title].forEach(function (name) {
+            } else {
+                olab_sort.categories[title].forEach(function (name) {
                     olab_sort.buttons.each(function () {
                         var navClass = "nav-title-" + title.replace(/\s+/g, '-').toLowerCase();
 
@@ -63,12 +68,9 @@ var olab_sort = (function () {
                             }
                             $('.' + navClass).append(this);
                         }
-
-                        if ($(this).text() == "Maak je SBAR") {
-                            $(this).attr("id", "navButtonExtra");
-                        }
                     });
-            });
+                });
+            }
         });
 
         $(".navBlock").append($("#main-navigation"));
@@ -77,7 +79,7 @@ var olab_sort = (function () {
     return {
         init: function () {
             getData(navigation_list);
-        },
+        }, olab_sort: olab_sort,
     };
 
 })();
