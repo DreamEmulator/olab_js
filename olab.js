@@ -6,6 +6,8 @@ var olab_sort = (function () {
         $.get(url).done(function (data) {
             parseCategories(data);
             updateView(olab_sort.categories, ".navBlock");
+            $(".navBlock").append($("#erasmus_notes"));
+            $(".navBlock").append($(".showPrijslijstButton"));
         });
     }
 
@@ -26,36 +28,50 @@ var olab_sort = (function () {
                 }
             }
         });
-        console.log(olab_sort.categories);
     };
 
     function updateView(object, selector) {
         olab_sort.buttons = $(".btn");
-        console.log(olab_sort.buttons);
 
         olab_sort.titles.forEach(function (title) {
 
-            olab_sort.categories[title].forEach(function (nav) {
-
+            if (title == "Navigatie"){
+                $(selector).append("<div id='main-navigation'></div>");
                 olab_sort.buttons.each(function () {
                     var navClass = "nav-title-" + title.replace(/\s+/g, '-').toLowerCase();
 
-                    if ($(this).text() == nav) {
+                    if ($(this).text() == name) {
                         if ($('.' + navClass).length == 0) {
-                            $(selector).append("<h1 class=" + navClass + ">" + title + "</h1>");
+                            $('#main-navigation').append("<h1 class=" + navClass + ">" + title + "</h1>");
                         }
-                        $('.' + navClass).append(this);
+                        $('#main-navigation').append(this);
                     }
 
-                    if ($(this).text() == "Maak je SBAR"){
+                    if ($(this).text() == "Maak je SBAR") {
                         $(this).attr("id", "navButtonExtra");
                     }
                 });
+            }
 
+            olab_sort.categories[title].forEach(function (name) {
+                    olab_sort.buttons.each(function () {
+                        var navClass = "nav-title-" + title.replace(/\s+/g, '-').toLowerCase();
+
+                        if ($(this).text() == name) {
+                            if ($('.' + navClass).length == 0) {
+                                $(selector).append("<h1 class=" + navClass + ">" + title + "</h1>");
+                            }
+                            $('.' + navClass).append(this);
+                        }
+
+                        if ($(this).text() == "Maak je SBAR") {
+                            $(this).attr("id", "navButtonExtra");
+                        }
+                    });
             });
-
-
         });
+
+        $(".navBlock").append($("#main-navigation"));
     }
 
     return {
@@ -174,7 +190,6 @@ $(document).ready(function () {
     scoreBijwerken(score);
 
 });
-
 
 //Dit is voor de digitale portemonnnee
 
