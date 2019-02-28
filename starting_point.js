@@ -98,8 +98,7 @@ $(document).ready(function () {
         for (i = 1; i < count; i = i + 2) {
             $("'.textBlock tr:nth-child(" + i + ")'").append(($("'.textBlock tr:nth-child(" + (i + 1) + ")'").contents()));
         }
-    }
-    ;
+    };
     //Old clock: <img src="../../../css/skin/basic/clock.png" class="clock">
     //   $( "a.btn:contains('>')").addClass('navButton');
     // $( "a.btn:contains('>>')").addClass('navButtonExtra');
