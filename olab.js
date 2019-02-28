@@ -6,6 +6,7 @@ var olab_sort = (function () {
         $.get(url).done(function (data) {
             parseCategories(data);
             updateView(olab_sort.categories, ".navBlock");
+            sortView();
             $(".navBlock").append($("#erasmus_notes"));
             $(".navBlock").append($(".showPrijslijstButton"));
         });
@@ -35,38 +36,37 @@ var olab_sort = (function () {
 
         olab_sort.titles.forEach(function (title) {
 
-            if (title == "Navigatie") {
+            if (title.toLowerCase().trim() == "navigatie") {
                 $(selector).append("<div id='main-navigation'></div>");
                 olab_sort.buttons.each(function (index, btnName) {
+                    var navTitleClass = "nav-title-" + title.replace(/\s+/g, '-').toLowerCase();
+                    var navButtonClass = "nav-btn-" + $(this).text().replace(/\s+/g, '-').toLowerCase();
 
-                    console.log(btnName);
+                    if ($(this).text().toLowerCase().trim() == $(btnName).text().toLowerCase().trim() ||
+                        ($(this).text().toLowerCase().trim().split("begin") > 0).length && ($(this).text().toLowerCase().trim().split("casus").length > 0 ||
+                            $(this).text().toLowerCase().trim().split("consult").length > 0)) {
 
-
-                    var navClass = "nav-title-" + title.replace(/\s+/g, '-').toLowerCase();
-
-                    if ($(this).text() == $(btnName).text()) {
-                        
-                        if ($('.' + navClass).length == 0) {
-                            $('#main-navigation').append("<h1 class=" + navClass + ">" + title + "</h1>");
+                        if ($('.' + navTitleClass).length == 0) {
+                            $('#main-navigation').append("<h1 class=" + navTitleClass + ">" + title + "</h1>");
                         }
-
-                        $('#main-navigation').append($(this));
+                        $('#main-navigation').append($(this).addClass(navButtonClass));
                     }
 
-                    if ($(this).text() == "Maak je SBAR") {
+                    if ($(this).text().toLowerCase().trim() == "maak je sbar") {
                         $(this).attr("id", "navButtonExtra");
                     }
                 });
             } else {
                 olab_sort.categories[title].forEach(function (name) {
                     olab_sort.buttons.each(function () {
-                        var navClass = "nav-title-" + title.replace(/\s+/g, '-').toLowerCase();
+                        var navTitleClass = "nav-title-" + title.replace(/\s+/g, '-').toLowerCase();
+                        var navButtonClass = "nav-btn-" + name.replace(/\s+/g, '-').toLowerCase();
 
-                        if ($(this).text() == name) {
-                            if ($('.' + navClass).length == 0) {
-                                $(selector).append("<h1 class=" + navClass + ">" + title + "</h1>");
+                        if ($(this).text().toLowerCase().trim() == name.toLowerCase().trim()) {
+                            if ($('.' + navTitleClass).length == 0) {
+                                $(selector).append("<h1 class=" + navTitleClass + ">" + title + "</h1>");
                             }
-                            $('.' + navClass).append(this);
+                            $('h1.' + navTitleClass).append($(this).addClass(navButtonClass));
                         }
                     });
                 });
@@ -74,6 +74,19 @@ var olab_sort = (function () {
         });
 
         $(".navBlock").append($("#main-navigation"));
+        $("#main-navigation a").addClass("navButton");
+    }
+
+    function sortView(){
+        olab_sort.titles.forEach(function (title) {
+            olab_sort.categories[title].forEach(function (name) {
+                var navTitleClass = ".nav-title-" + title.replace(/\s+/g, '-').toLowerCase();
+                var navButtonClass = ".nav-btn-" + name.replace(/\s+/g, '-').toLowerCase();
+                if ($(navButtonClass).text().toLowerCase().trim() == name.toLowerCase().trim()){
+                    $(navTitleClass).append($(navButtonClass));
+                }
+            });
+        });
     }
 
     return {
